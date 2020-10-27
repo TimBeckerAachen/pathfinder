@@ -6,15 +6,16 @@ from kivy.properties import ListProperty
 from kivy.properties import StringProperty
 
 from src.simple_pathfinder import SimplePathfinder
+from src.utils import WHITE, BLACK, BLUE, RED, GREEN, PURPLE
 
 
 class GridCell(Button):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.background_normal = ''
-        self.color = (0, 0, 0, 1)
+        self.color = BLACK
         self.font_size = 40
-        self.background_color = (1, 1, 1, 1)
+        self.background_color = WHITE
         self.text = ''
 
     def on_press(self):
@@ -22,13 +23,13 @@ class GridCell(Button):
 
     def on_text(self, *args):
         if self.text == 'start':
-            self.background_color = (1, 0, 1, 1)
+            self.background_color = PURPLE
         elif self.text == 'end':
-            self.background_color = (1, 0, 0, 1)
+            self.background_color = RED
         elif self.text == 'wall':
-            self.background_color = (0, 1, 0, 1)
+            self.background_color = GREEN
         else:
-            self.background_color = (1, 1, 1, 1)
+            self.background_color = WHITE
 
 
 class Grid(GridLayout):
@@ -83,36 +84,37 @@ class Board(GridLayout):
 
     def set_start(self):
         self.set_state = 'start'
-        self.ids.start_button.background_color = (1, 0, 0, 1)
-        self.ids.end_button.background_color = (0, 0, 1, 1)
-        self.ids.wall_button.background_color = (0, 0, 1, 1)
+        self.ids.start_button.background_color = RED
+        self.ids.end_button.background_color = BLUE
+        self.ids.wall_button.background_color = BLUE
 
     def set_end(self):
         self.set_state = 'end'
-        self.ids.start_button.background_color = (0, 0, 1, 1)
-        self.ids.end_button.background_color = (1, 0, 0, 1)
-        self.ids.wall_button.background_color = (0, 0, 1, 1)
+        self.ids.start_button.background_color = BLUE
+        self.ids.end_button.background_color = RED
+        self.ids.wall_button.background_color = BLUE
 
     def set_wall(self):
         self.set_state = 'wall'
-        self.ids.start_button.background_color = (0, 0, 1, 1)
-        self.ids.end_button.background_color = (0, 0, 1, 1)
-        self.ids.wall_button.background_color = (1, 0, 0, 1)
+        self.ids.start_button.background_color = BLUE
+        self.ids.end_button.background_color = BLUE
+        self.ids.wall_button.background_color = RED
 
     def clear(self):
-        self.ids.start_button.background_color = (0, 0, 1, 1)
-        self.ids.end_button.background_color = (0, 0, 1, 1)
-        self.ids.wall_button.background_color = (0, 0, 1, 1)
+        self.ids.start_button.background_color = BLUE
+        self.ids.end_button.background_color = BLUE
+        self.ids.wall_button.background_color = BLUE
         for cell in self.ids.grid.cells:
             cell.text = ''
 
     def solve(self):
-        # TODO: error if no start or no end
         maze = self.ids.grid.get_maze()
-        # TODO: visualization
         finder = SimplePathfinder(maze)
-        # TODO: popup
-        print(finder.ispath())
+
+        if finder.get_start() is None or finder.get_end() is None:
+            raise KeyError('Start and end need to be specified!')
+
+        print(f'There is a possible path: {finder.ispath()}')
         self.ids.grid.visualize_tried_pos(finder)
 
 
