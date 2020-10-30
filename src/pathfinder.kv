@@ -1,0 +1,38 @@
+<GridCell>:
+    canvas.before:
+        Color:
+            rgba: 0, 0, 0, 1
+        Line:
+            width: 2
+            rectangle: self.x, self.y, self.width, self.height
+
+<Board>:
+    cols: 2
+    Grid:
+        id: grid
+    Buttons:
+        orientation: 'vertical'
+        size_hint_x: 0.2
+        Button:
+            id: start_button
+            text: 'set start'
+            background_color: (0, 0, 1, 1)
+            on_press: root.set_start()
+        Button:
+            id: end_button
+            text: 'set end'
+            background_color: (0, 0, 1, 1)
+            on_press: root.set_end()
+        Button:
+            id: wall_button
+            text: 'set wall'
+            background_color: (0, 0, 1, 1)
+            on_press: root.set_wall()
+        Button:
+            text: 'solve'
+            background_color: (1, 0, 1, 1)
+            on_press: root.solve()
+        Button:
+            text: 'clear'
+            background_color: (1, 0, 1, 1)
+            on_press: root.clear()
